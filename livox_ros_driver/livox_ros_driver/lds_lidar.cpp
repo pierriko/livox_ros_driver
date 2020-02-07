@@ -604,8 +604,9 @@ int LdsLidar::ParseTimesyncConfig(rapidjson::Document& doc) {
 
     if(!object.HasMember("device_name") || !object["device_name"].IsString()) break;
     std::string device_name = object["device_name"].GetString();
+    // sizeof-1: specified bound 256 equals destination size [-Werror=stringop-truncation]
     std::strncpy(timesync_config_.dev_config.name, device_name.c_str(),\
-                 sizeof(timesync_config_.dev_config.name));
+                 sizeof(timesync_config_.dev_config.name)-1);
 
     if(!object.HasMember("comm_device_type") || !object["comm_device_type"].IsInt()) break;
     timesync_config_.dev_config.type = object["comm_device_type"].GetInt();
@@ -658,8 +659,9 @@ int LdsLidar::ParseConfigFile(const char* pathname) {
           memset(&config, 0, sizeof(config));
           if(object.HasMember("broadcast_code") && object["broadcast_code"].IsString()) {
             std::string broadcast_code = object["broadcast_code"].GetString();
+            // sizeof-1: specified bound 256 equals destination size [-Werror=stringop-truncation]
             std::strncpy(config.broadcast_code, broadcast_code.c_str(),\
-                        sizeof(config.broadcast_code));
+                        sizeof(config.broadcast_code)-1);
           } else {
             printf("User config file parse error\n");
             continue;
