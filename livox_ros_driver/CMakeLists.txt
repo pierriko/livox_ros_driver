@@ -29,6 +29,7 @@ find_package(catkin REQUIRED COMPONENTS
 	std_msgs
 	message_generation
 	rosbag
+	pcl_ros
 	)
 
 ## Find pcl lib
@@ -63,7 +64,7 @@ endif (APR_FOUND)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also n    eed
 catkin_package(CATKIN_DEPENDS
-	roscpp rospy std_msgs message_runtime
+	roscpp rospy std_msgs message_runtime pcl_ros
 	)
 
 #---------------------------------------------------------------------------------------
@@ -79,6 +80,9 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# console bridge in rosbag uses deprecated log
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-declarations")
 
 ## make sure the livox_sdk_static library is installed
 find_library(LIVOX_SDK_LIBRARY liblivox_sdk_static.a /usr/local/lib)
